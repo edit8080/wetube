@@ -6,3 +6,11 @@ export const localMiddleware = (req, res, next) => {
 
   next();
 };
+
+export const contentPolicy = (req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "script-src 'self' https://archive.org"
+  );
+  next();
+};
