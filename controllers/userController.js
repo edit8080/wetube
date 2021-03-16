@@ -1,5 +1,6 @@
 import routes from "../routes";
 
+// 회원가입
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
 };
@@ -17,7 +18,16 @@ export const postJoin = (req, res) => {
   }
   res.render("join", { pageTitle: "Join" });
 };
-export const login = (req, res) => res.render("login", { pageTitle: "Login" });
+
+// 로그인
+export const getLogin = (req, res) => {
+  res.render("login", { pageTitle: "Login" });
+};
+export const postLogin = (req, res) => {
+  res.redirect(routes.home);
+  res.render("login", { pageTitle: "Login" });
+};
+
 export const logout = (req, res) =>
   res.render("logout", { pageTitle: "Log out" });
 
