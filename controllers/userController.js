@@ -16,7 +16,6 @@ export const postJoin = (req, res) => {
     // To Do: Login User
     res.redirect(routes.home);
   }
-  res.render("join", { pageTitle: "Join" });
 };
 
 // 로그인
@@ -25,11 +24,12 @@ export const getLogin = (req, res) => {
 };
 export const postLogin = (req, res) => {
   res.redirect(routes.home);
-  res.render("login", { pageTitle: "Login" });
 };
 
-export const logout = (req, res) =>
-  res.render("logout", { pageTitle: "Log out" });
+export const logout = (req, res) => {
+  // To Do : Process Log Out
+  res.redirect(routes.home);
+};
 
 export const users = (req, res) => res.render("users", { pageTitle: "Users" });
 export const userDetail = (req, res) =>
