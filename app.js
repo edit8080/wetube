@@ -14,6 +14,8 @@ const app = express();
 /* middleware */
 app.use(helmet());
 app.set("view engine", "pug");
+// /uploads로 접근 시 서버의 uploads 디렉토리로 이동하게하는 미들웨어
+app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
