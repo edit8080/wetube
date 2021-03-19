@@ -1,12 +1,17 @@
 extends layouts/main.pug
+include mixins/videoBlock
 
 block content  
     .search__header 
         h3 Searching for: #{searchingBy}
     .search__videos
-        each item in videoList
-            +videoBlock({
-                videoFile: item.videoFile,
-                title: item.title,
-                views: item.views
-            })
+        if videoList.length === 0
+            h5 No Videos Found
+        else
+            each item in videoList
+                +videoBlock({
+                    id:item.id,
+                    videoFile: item.fileUrl,
+                    title: item.title,
+                    views: item.views,
+                })

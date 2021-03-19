@@ -3,21 +3,29 @@ import Video from "../models/Video";
 
 export const home = async (req, res) => {
   try {
-    // 모든 Video Fetch
-    const videoList = await Video.find({});
+    // 모든 Video Fetch and Sort (새로운 비디오가 가장 위)
+    const videoList = await Video.find({}).sort({ _id: -1 });
     res.render("home", { pageTitle: "Home", videoList });
   } catch (error) {
     console.log(error);
-    // 에러 시 빈 Array 전달
     res.render("home", { pageTitle: "Home", videoList: [] });
   }
 };
-export const search = (req, res) => {
+
+// 비디오 검색
+export const search = async (req, res) => {
   const {
     query: { term: searchingBy },
   } = req;
-
-  res.render("search", { pageTitle: "Search", searchingBy });
+  let videoList = [];
+  try {
+    videoList = await Video.find({
+      title: { $regex: searchingBy, $options: "i" },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  res.render("search", { pageTitle: "Search", searchingBy, videoList });
 };
 
 export const videos = (req, res) =>
@@ -74,7 +82,6 @@ export const postEditVideo = async (req, res) => {
     body: { title, description },
   } = req;
   try {
-    const query = {};
     await Video.findOneAndUpdate({ _id: id }, { title, description });
     res.redirect(routes.videoDetail(id));
   } catch {
