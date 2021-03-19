@@ -37,8 +37,6 @@ export const postUpload = async (req, res) => {
     title,
     description,
   });
-
-  // To Do : Upload and Save Video
   res.redirect(routes.videoDetail(newVideo.id));
 };
 
@@ -70,7 +68,6 @@ export const getEditVideo = async (req, res) => {
     res.redirect(routes.home);
   }
 };
-
 export const postEditVideo = async (req, res) => {
   const {
     params: { id },
@@ -84,5 +81,17 @@ export const postEditVideo = async (req, res) => {
     res.redirect(routes.home);
   }
 };
-export const deleteVideo = (req, res) =>
-  res.render("deleteVideo", { pageTitle: "Delete Video" });
+
+// 업로드한 비디오 삭제
+export const deleteVideo = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  try {
+    await Video.findByIdAndDelete(id);
+  } catch (error) {
+    console.log(error);
+  }
+  res.redirect(routes.home);
+};
