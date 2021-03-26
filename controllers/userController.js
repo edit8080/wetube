@@ -78,6 +78,50 @@ export const postGithubLogin = (req, res, next) => {
   next();
 };
 
+// 구글 로그인
+export const googleLogin = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
+
+export const googleLoginCallback = async (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  console.log(profile);
+  const {
+    _json: { sub, name, picture, email },
+  } = profile;
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      user.name = name;
+      user.email = email;
+      user.avatarUrl = picture;
+      user.googleId = sub;
+
+      user.save();
+      return cb(null, user);
+    } else {
+      const newUser = await User.create({
+        name,
+        email,
+        avatarUrl: picture,
+        googleId: sub,
+      });
+      return cb(null, newUser);
+    }
+  } catch (error) {
+    return cb(error);
+  }
+};
+export const postGoogleLogin = (req, res, next) => {
+  res.redirect(routes.home);
+  next();
+};
+
 export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);

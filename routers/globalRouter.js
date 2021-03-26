@@ -8,6 +8,8 @@ import {
   postLogin,
   githubLogin,
   postGithubLogin,
+  googleLogin,
+  postGoogleLogin,
   getMe,
 } from "../controllers/userController";
 import { home, search } from "../controllers/videoControllers";
@@ -32,6 +34,13 @@ globalRouter.get(
     failureRedirect: "/login",
   }),
   postGithubLogin
+);
+
+globalRouter.get(routes.google, googleLogin);
+globalRouter.get(
+  routes.googleCallback,
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  postGoogleLogin
 );
 
 globalRouter.get(routes.logout, onlyPrivate, logout);
