@@ -54,6 +54,9 @@ export const githubLoginCallback = async (
   try {
     const user = await User.findOne({ email });
     if (user) {
+      user.name = name;
+      user.email = email;
+      user.avatarUrl = avatar_url;
       user.githubId = id;
       user.save();
       return cb(null, user);
@@ -78,6 +81,10 @@ export const postGithubLogin = (req, res, next) => {
 export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);
+};
+export const getMe = (req, res) => {
+  // 현재 로그인한 사용자
+  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
 };
 
 export const users = (req, res) => res.render("users", { pageTitle: "Users" });
