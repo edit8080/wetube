@@ -15,18 +15,25 @@ export const postJoin = async (req, res, next) => {
     res.status(400);
   } else {
     try {
-      const user = await User({
-        name,
-        email,
-      });
-      await User.register(user, password);
-      next(); // 회원등록 후 로그인 진행
+      const user = await User.findOne({ email });
+
+      if (user) {
+        console.log("이미 등록된 사용자입니다.");
+        res.redirect(routes.login);
+      } else {
+        const newUser = await User({
+          name,
+          email,
+          avatarUrl:
+            "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png",
+        });
+        await User.register(newUser, password);
+        next(); // 회원등록 후 로그인 진행
+      }
     } catch (error) {
       console.log(error);
       res.redirect(routes.home);
     }
-
-    // To Do: Login User
   }
 };
 
@@ -53,7 +60,8 @@ export const githubLoginCallback = async (
 
   try {
     const user = await User.findOne({ email });
-    if (user) {
+
+    if (user !== null) {
       user.name = name;
       user.email = email;
       user.avatarUrl = avatar_url;
@@ -62,11 +70,12 @@ export const githubLoginCallback = async (
       return cb(null, user);
     } else {
       const newUser = await User.create({
-        name,
         email,
+        name,
         githubId: id,
         avatarUrl: avatar_url,
       });
+
       return cb(null, newUser);
     }
   } catch (error) {
@@ -75,7 +84,6 @@ export const githubLoginCallback = async (
 };
 export const postGithubLogin = (req, res, next) => {
   res.redirect(routes.home);
-  next();
 };
 
 // 구글 로그인
@@ -136,6 +144,7 @@ export const userDetail = async (req, res) => {
   const {
     params: { id },
   } = req;
+
   try {
     const user = await User.findById(id);
     res.render("userDetail", { pageTitle: "User Detail", user });
