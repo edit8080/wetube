@@ -82,7 +82,7 @@ export const githubLoginCallback = async (
     return cb(error);
   }
 };
-export const postGithubLogin = (req, res, next) => {
+export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
@@ -125,9 +125,8 @@ export const googleLoginCallback = async (
     return cb(error);
   }
 };
-export const postGoogleLogin = (req, res, next) => {
+export const postGoogleLogin = (req, res) => {
   res.redirect(routes.home);
-  next();
 };
 
 export const logout = (req, res) => {
@@ -161,7 +160,6 @@ export const postEditProfile = async (req, res) => {
     file,
   } = req;
 
-  console.log(req);
   try {
     await User.findOneAndUpdate(req.user.id, {
       name,
@@ -171,10 +169,26 @@ export const postEditProfile = async (req, res) => {
 
     res.redirect(routes.me);
   } catch (error) {
-    console.log(error);
-    res.render("editProfile", { pageTitle: "Edit Profile" });
+    res.redirect(routes.editProfile);
   }
 };
 
-export const changePassword = (req, res) =>
+export const getChangePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "Change Password" });
+
+export const postChangePassword = async (req, res) => {
+  const {
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+
+  try {
+    if (newPassword !== newPassword1) {
+      throw new Error("Mismatch New Password");
+    }
+    await req.user.changePassword(oldPassword, newPassword);
+    res.redirect(routes.me);
+  } catch (error) {
+    res.status(400);
+    res.redirect(`/users${routes.changePassword}`);
+  }
+};
