@@ -73,6 +73,9 @@ export const getEditVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
+    if (video.creator.toString() !== req.user.id) {
+      throw Error("Mismatch Creator");
+    }
     res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
   } catch (error) {
     console.log(error);
@@ -99,6 +102,10 @@ export const deleteVideo = async (req, res) => {
   } = req;
 
   try {
+    const video = await Video.findById(id);
+    if (video.creator.toString() !== req.user.id) {
+      throw Error("Mismatch Creator");
+    }
     await Video.findByIdAndDelete(id);
   } catch (error) {
     console.log(error);
