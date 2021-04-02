@@ -5,6 +5,8 @@ mixin videoPlayer(video = {})
             .videoPlayer__column
                 span#js-volumeButton
                     i.fas.fa-volume-up
+                    div.videoPlayer__volume
+                        input#js-volume(type="range", min="0", max="1", step="0.1" value="0.5")
                 span 
                     span#js-currentTime 00:00:00 
                     | / 

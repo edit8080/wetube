@@ -29,6 +29,32 @@
     .videoPlayer__column:first-child {
       display: flex;
       align-items: center;
+
+      #js-volumeButton {
+        position: relative;
+
+        &:hover {
+          .videoPlayer__volume {
+            opacity: 0.5;
+          }
+        }
+
+        .videoPlayer__volume {
+          width: 120px;
+          padding: 0 10px;
+          left: -50px;
+          top: -90px;
+          position: absolute;
+          transform: rotateZ(-90deg);
+          background-color: black;
+          opacity: 0;
+          transition: opacity 0.4s linear;
+        }
+        #js-volume {
+          padding: 10px 0;
+        }
+      }
+
       i {
         margin-right: 10px;
       }
