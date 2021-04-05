@@ -2,7 +2,6 @@ const videoContainer = document.getElementById("js-videoPlayer");
 const videoPlayer = document.querySelector("#js-videoPlayer video");
 const playBtn = document.getElementById("js-playButton");
 const volumeBtn = document.getElementById("js-volumeButton");
-const volumeBtnIcon = volumeBtn.querySelector("i");
 const fullScreenBtn = document.getElementById("js-fullScreenButton");
 const currentTime = document.getElementById("js-currentTime");
 const totalTime = document.getElementById("js-totalTime");
@@ -18,6 +17,8 @@ function handlePlayClick() {
   }
 }
 function handleVolumeClick() {
+  const volumeBtnIcon = volumeBtn.querySelector("i");
+
   if (videoPlayer.muted) {
     volumeRange.value = videoPlayer.volume;
     videoPlayer.muted = false;
@@ -74,6 +75,7 @@ function handleEnded() {
 function handleDrag(e) {
   e.stopPropagation();
 
+  const volumeBtnIcon = volumeBtn.querySelector("i");
   const {
     target: { value },
   } = e;
