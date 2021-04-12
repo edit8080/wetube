@@ -1,3 +1,5 @@
+import getBlobDuration from "get-blob-duration";
+
 const videoContainer = document.getElementById("js-videoPlayer");
 const videoPlayer = document.querySelector("#js-videoPlayer video");
 const playBtn = document.getElementById("js-playButton");
@@ -67,8 +69,12 @@ const formatDate = (seconds) => {
   }
   return `${hours}:${minutes}:${totalSeconds} `;
 };
-function setTotalTime() {
-  const totalTimeStr = formatDate(Math.floor(videoPlayer.duration));
+async function setTotalTime() {
+  const blob = await fetch(videoPlayer.src).then((response) => response.blob());
+  const duration = await getBlobDuration(blob);
+  console.log(duration);
+  const totalTimeStr = formatDate(Math.floor(duration));
+
   totalTime.innerHTML = totalTimeStr;
 }
 function getCurrentTime() {
