@@ -105,7 +105,6 @@ export const googleLoginCallback = async (
   profile,
   cb
 ) => {
-  console.log(profile);
   const {
     _json: { sub, name, picture, email },
   } = profile;
